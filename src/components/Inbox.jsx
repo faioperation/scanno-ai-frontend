@@ -1,11 +1,18 @@
 "use client";
 
 import React, { useContext, useEffect, useRef, useState } from "react";
-import IputField from "./IputFiled";
+import IputFiled from "./IputFiled";
 import { AuthContext } from "@/provider/AuthProvider";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import ReactMarkdown from "react-markdown";
+
+// Function to detect if text contains Arabic characters
+const containsArabic = (text) => {
+  if (!text) return false;
+  const arabicRegex = /[\u0600-\u06FF\u0750-\u077F\u08A0-\u08FF\uFB50-\uFDFF\uFE70-\uFEFF]/;
+  return arabicRegex.test(text);
+};
 
 const Inbox = () => {
   const { messages } = useContext(AuthContext);
@@ -30,7 +37,13 @@ const Inbox = () => {
   const AnimatedText = ({ msg, isLatest }) => {
     const [text, setText] = useState("");
 
-    const normalized = msg?.replace(/\r\n/g, "\n") ?? "";
+    // REMOVE ALL DOUBLE LINE SPACING
+    const normalized = (msg?.replace(/\r\n/g, "\n") ?? "").replace(
+      /\n\s*\n/g,
+      "\n"
+    );
+
+    const isArabic = containsArabic(normalized);
 
     useEffect(() => {
       if (!isLatest) {
@@ -56,22 +69,59 @@ const Inbox = () => {
     }, [normalized, isLatest]);
 
     return (
-      <ReactMarkdown
-        components={{
-          p: ({ children }) => (
-            <p className="m-0 p-0 whitespace-pre-wrap leading-[1.35]">
-              {children}
-            </p>
-          ),
-          li: ({ children }) => (
-            <li className="m-0 p-0 whitespace-pre-wrap leading-[1.35]">
-              {children}
-            </li>
-          ),
-        }}
-      >
-        {text}
-      </ReactMarkdown>
+      <div dir={isArabic ? "rtl" : "ltr"}>
+        <ReactMarkdown
+          components={{
+            p: ({ children }) => (
+              <p className="m-0 p-0 whitespace-pre-line leading-[1.2]">
+                {children}
+              </p>
+            ),
+            li: ({ children }) => (
+              <li className="m-0 p-0 whitespace-pre-line leading-[1.2]">
+                {children}
+              </li>
+            ),
+            ul: ({ children }) => (
+              <ul className="m-0 p-0 whitespace-pre-line leading-[1.2]">
+                {children}
+              </ul>
+            ),
+            ol: ({ children }) => (
+              <ol className="m-0 p-0 whitespace-pre-line leading-[1.2]">
+                {children}
+              </ol>
+            ),
+            h1: ({ children }) => (
+              <h1 className="m-0 p-0 whitespace-pre-line leading-[1.2] font-bold">
+                {children}
+              </h1>
+            ),
+            h2: ({ children }) => (
+              <h2 className="m-0 p-0 whitespace-pre-line leading-[1.2] font-bold">
+                {children}
+              </h2>
+            ),
+            h3: ({ children }) => (
+              <h3 className="m-0 p-0 whitespace-pre-line leading-[1.2] font-bold">
+                {children}
+              </h3>
+            ),
+            a: ({ href, children }) => (
+              <a
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline hover:text-blue-800 cursor-pointer"
+              >
+                {children}
+              </a>
+            ),
+          }}
+        >
+          {text}
+        </ReactMarkdown>
+      </div>
     );
   };
 
@@ -85,6 +135,8 @@ const Inbox = () => {
 
             const isLatestAI =
               msg.sender === true && idx === messages.length - 1;
+
+            const isArabic = containsArabic(finalMessage);
 
             return (
               <div
@@ -102,7 +154,10 @@ const Inbox = () => {
                     )}
 
                     {!msg.loading && finalMessage && (
-                      <div className="bg-white text-lg px-3 py-2 text-black rounded-t-xl rounded-br-xl shadow leading-[1.35]">
+                      <div
+                        dir={isArabic ? "rtl" : "ltr"}
+                        className="bg-white text-lg px-3 py-2 text-black rounded-t-xl rounded-br-xl shadow leading-[1.2]"
+                      >
                         <AnimatedText
                           msg={finalMessage}
                           isLatest={isLatestAI}
@@ -142,8 +197,26 @@ const Inbox = () => {
                     </div>
 
                     {finalMessage && (
-                      <div className="text-lg inline-flex px-3 py-2 bg-[#00793D] text-white rounded-t-xl rounded-bl-xl shadow leading-[1.35] whitespace-pre-wrap">
-                        <ReactMarkdown>{finalMessage}</ReactMarkdown>
+                      <div
+                        dir={isArabic ? "rtl" : "ltr"}
+                        className="text-lg inline-flex px-3 py-2 bg-[#00793D] text-white rounded-t-xl rounded-bl-xl shadow leading-[1.2] whitespace-pre-line"
+                      >
+                        <ReactMarkdown
+                          components={{
+                            a: ({ href, children }) => (
+                              <a
+                                href={href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-300 underline hover:text-blue-100 cursor-pointer"
+                              >
+                                {children}
+                              </a>
+                            ),
+                          }}
+                        >
+                          {finalMessage}
+                        </ReactMarkdown>
                       </div>
                     )}
                   </div>
@@ -155,7 +228,7 @@ const Inbox = () => {
           <div ref={bottomRef}></div>
         </div>
 
-        <IputField />
+        <IputFiled />
       </div>
     </>
   );
