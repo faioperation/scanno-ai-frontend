@@ -36,7 +36,7 @@ export default function LanddingPage() {
 
         <div>
           <Link
-            className="bg-[#00793D] py-3 px-32 rounded-full text-white font-medium"
+            className="bg-[#00793D] py-3 px-10 md:px-24 lg:px-32 rounded-full text-white font-medium"
             href={"/inbox"}
           >
             Start Chatting
