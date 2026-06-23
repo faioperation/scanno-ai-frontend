@@ -190,6 +190,7 @@ export default function ChatInput({
 
         <textarea
           ref={textareaRef}
+          data-testid="chat-input"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
@@ -206,6 +207,7 @@ export default function ChatInput({
 
         <button
           type="submit"
+          data-testid="chat-send"
           disabled={disabled || (!message.trim() && !pendingImage)}
           className="shrink-0 rounded-xl bg-emerald-700 p-2.5 text-white transition-colors hover:bg-emerald-600 disabled:cursor-not-allowed disabled:opacity-40 sm:p-3"
           aria-label="Send message"

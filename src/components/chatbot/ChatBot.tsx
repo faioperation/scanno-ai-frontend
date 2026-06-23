@@ -175,7 +175,10 @@ export default function ChatBot() {
     <>
       <div className="flex h-full min-h-0 flex-col">
         {/* Header */}
-        <header className="shrink-0 border-b border-white/10 bg-black/20 px-4 py-3 backdrop-blur-md sm:px-6">
+        <header
+          data-testid="chatbot-header"
+          className="shrink-0 border-b border-white/10 bg-black/20 px-4 py-3 backdrop-blur-md sm:px-6"
+        >
           <div className="mx-auto flex max-w-4xl items-center justify-between gap-3">
             <div className="flex min-w-0 items-center gap-3">
               <Link

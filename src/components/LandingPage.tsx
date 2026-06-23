@@ -16,7 +16,10 @@ export default function LandingPage() {
             AI-Powered Car Inspection
           </div>
 
-          <h1 className="anim-slide-up anim-delay-1 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl">
+          <h1
+            data-testid="landing-title"
+            className="anim-slide-up anim-delay-1 text-3xl font-black leading-tight tracking-tight text-white sm:text-4xl md:text-5xl lg:text-6xl"
+          >
             {BRAND_CONFIG.brandName}
           </h1>
 

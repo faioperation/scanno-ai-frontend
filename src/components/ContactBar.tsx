@@ -31,6 +31,7 @@ export default function ContactBar({ onLinkClick }: ContactBarProps) {
       {links.map((link) => (
         <a
           key={link.label}
+          data-testid={`contact-${link.label.toLowerCase()}`}
           href={link.href}
           onClick={(e) => {
             e.preventDefault();

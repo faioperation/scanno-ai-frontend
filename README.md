@@ -142,6 +142,42 @@ Each response ends with CarDoctor contact details and booking links.
 
 Configured in `src/lib/openai.ts`.
 
+## E2E Testing (Playwright)
+
+End-to-end tests cover the landing page, chatbot UI, inbox redirect, booking modal, social links, and API validation.
+
+### Local (production build)
+
+```bash
+npm run test:e2e
+```
+
+This builds the app, starts it on port `3005`, and runs tests in Chromium + mobile Chrome.
+
+### Against Vercel deployment
+
+```bash
+PLAYWRIGHT_BASE_URL=https://your-app.vercel.app npm run test:e2e:vercel
+```
+
+Replace `your-app.vercel.app` with your live Vercel URL.
+
+### Useful commands
+
+```bash
+npm run test:e2e:ui          # Interactive Playwright UI
+npx playwright show-report   # View HTML report after a run
+```
+
+### What is tested
+
+- CarDoctor branding and CTAs on landing page
+- Feature cards and root social links (Facebook, Instagram, WhatsApp)
+- Booking modal from contact bar
+- Navigation to `/chatbot` and `/inbox` redirect
+- Chat welcome message, input, send button, clear chat
+- `POST /api/chat` returns 400 for empty messages
+
 ## Deploy on Vercel
 
 1. Push the project to GitHub

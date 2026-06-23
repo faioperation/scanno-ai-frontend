@@ -43,7 +43,10 @@ export default function BookingSuccessModal({
         onClick={onClose}
       />
 
-      <div className="relative w-full max-w-md rounded-2xl bg-white p-6 sm:p-8 shadow-2xl animate-scale-in">
+      <div
+        data-testid="booking-success-modal"
+        className="relative w-full max-w-md rounded-2xl bg-white p-6 sm:p-8 shadow-2xl animate-scale-in"
+      >
         <button
           onClick={onClose}
           className="absolute right-4 top-4 rounded-full p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
